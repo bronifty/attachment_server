@@ -1,0 +1,43 @@
+<html>
+    <head>
+        <title>Upload</title>
+        <script>
+            const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiODMzZDMzYWQtNTQzNi00M2I0LTk2MWItYTgzN2QwYzcxOWY1IiwiaWF0IjoxNjc4MDUxODg2fQ.DFeLpPzVrZNZYGMrrBKLHONyGPXVcjadwe7yYHbTpvU';
+
+            async function start_upload() {
+                event.preventDefault();
+
+                const messageBlock = document.querySelector("#message");
+                messageBlock.innerHTML = "";
+
+                const data = new FormData(document.querySelector("#form"));
+
+                try {
+                    const response = await fetch('/attachment/upload', {
+                        'method': 'POST',
+                        'headers': {
+                            'Authorization': 'Bearer ' + token
+                        },
+                        'body': data
+                    });
+                    if (!response.ok) {
+                        throw new Error('Failed with code ' + response.status);
+                    }
+                    messageBlock.innerHTML = "Uploaded";
+                } catch(e) {
+                    messageBlock.innerHTML = "Error";
+                }
+
+                return false;
+            }
+        </script>
+    </head>
+    <body>
+        <form id="form" onsubmit="return start_upload();">
+            <input type="file" id="file" name="upload" />
+            <input type="submit" value="Upload" />
+        </form>
+        <div id="message">
+        </div>
+    </body>
+<html>
